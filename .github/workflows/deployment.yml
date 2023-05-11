@@ -1,0 +1,18 @@
+name: deployment
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+jobs:
+    build:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v2
+            - name: Copy files
+              run: rsync -a /root/actions-runner-lms/_work/lms-portal/lms-portal/ /var/www/lms-portal
+            - name: Give permission
+              run: chmod -R 775 /var/www/lms-portal
+            - name: Install dependencies
+              run: npm i --prefix /var/www/lms-portal
